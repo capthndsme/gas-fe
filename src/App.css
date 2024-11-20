@@ -8,15 +8,16 @@
 }
 
 .padTop {
-  padding-top: 64px;
+  padding-top: 16px;
 }
 
 .padnormal {
   padding-top: 16px;
 }
 .simplenav {
-  position: fixed; 
+  position: sticky; 
   top:0;left:0;width:100%;
+
   background-color: #333;
  
   box-shadow: 0px 2px 10px rgba(0,0,0,0.1);
@@ -33,7 +34,7 @@
 
 .simplecard {
   background-color: #333;
-  padding: 8px;
+  padding: 8px 12px;
   margin: 8px;
   border-radius: 10px;
   box-shadow: 0px 2px 10px rgba(0,0,0,0.1);
@@ -43,4 +44,14 @@
 .big {
   font-size: 24px;
   font-weight: 400;
+ 
+}
+.small {
+  font-size:14px;
+}
+
+.smallcaps {
+  text-transform: uppercase;
+  letter-spacing: 0.0125em;
+  font-size: 14px;
 }
