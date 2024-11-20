@@ -8,7 +8,7 @@ const HomePage = ({ requestPushPermission }: {
 }) => {
   const [sensorData, setSensorData] = useState<SensorData | null>(null);
   const [settings, setSettings] = useState<Settings | null>(null);
-
+  const [humanState, setHumanState] = useState<SensorData | null>(null)
   const axios = useAxiosWithAuth();
 
   useEffect(() => {
@@ -18,6 +18,15 @@ const HomePage = ({ requestPushPermission }: {
       try {
         const { data: sensorData } = await axios.get("data-report");
         setSensorData(sensorData);
+
+        const {data: humanData, status} = await axios.get("last-detect")
+        if (status === 204) {
+ 
+          setHumanState(null)
+        } else {
+          setHumanState(humanData)
+        }
+        
       } catch (error) {
         console.error("Error fetching sensor data:", error);
       }
@@ -45,7 +54,7 @@ const HomePage = ({ requestPushPermission }: {
 
   const getLevel = (value: number): string => {
     if (!settings) return "N/A"; // Handle case where settings are not yet loaded
-    
+
     if (value >= settings.highVal!) return "High";
     if (value >= settings.midVal!) return "Med";
     if (value >= settings.lowVal!) return "Low";  // Assuming lowVal is always defined or has a default
@@ -86,6 +95,17 @@ const HomePage = ({ requestPushPermission }: {
               />
             </>
           )}
+          <div className="simplecard">
+            <div className="smallcaps">
+              Last human detection state
+            </div>
+            <div className="big">
+              {humanState ?
+                new Date(humanState.timestamp).toUTCString()
+                : "Never detected"
+              }
+            </div>
+          </div>
         </div>
       </div>
 
