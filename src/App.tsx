@@ -67,7 +67,7 @@ function App() {
         <div className="simplenav ">
           <div className=" max-width">
             Gas Sensor
-            <Link to="/settings" style={{marginLeft: "1em", display: "inline-block", textDecoration: "none"}}>Settings</Link>
+            <Link to="/settings" style={{marginLeft: "1em", display: "inline-block", textDecoration: "none"}}></Link>
           </div>
         </div>
         <Routes>

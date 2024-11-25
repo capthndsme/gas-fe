@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { SensorData } from "../typings/Sensor";
 import { useAxiosWithAuth } from "../hooks/useAxiosWithAuth";
 import { Settings } from "../typings/Vals";
+import Gauge from "../Gauge";
 
 const HomePage = ({ requestPushPermission }: {
   requestPushPermission: () => void
@@ -44,22 +45,14 @@ const HomePage = ({ requestPushPermission }: {
     fetchSettings(); // Fetch settings once
 
     fetchData(); // Initial fetch
-    cancel = setInterval(fetchData, 1000) as unknown as number; // Fetch every second
+    cancel = setInterval(fetchData, 1600) as unknown as number; // Fetch every second ish
 
     return () => {
       clearInterval(cancel); // Clear interval on unmount
     };
   }, []);
 
-
-  const getLevel = (value: number): string => {
-    if (!settings) return "N/A"; // Handle case where settings are not yet loaded
-
-    if (value >= settings.highVal!) return "High";
-    if (value >= settings.midVal!) return "Med";
-    if (value >= settings.lowVal!) return "Low";  // Assuming lowVal is always defined or has a default
-    return "Very low"; // Default to LOW if below all thresholds or settings aren't loaded
-  };
+ 
 
 
   return (
@@ -79,31 +72,51 @@ const HomePage = ({ requestPushPermission }: {
           {sensorData && settings && (
             <>
               <Card
-                data={getLevel(sensorData.gas1)}
-                title="Gas sensor 1"
+                data={sensorData.gas1}
+                title="MQ-135"
                 percentage={`${((sensorData.gas1 / 1000) * 100).toFixed(2)}% (${sensorData.gas1} / 1000)`}
+      
+                mid={settings.midVal ?? 500}
+                high={settings.highVal ?? 900}
               />
               <Card
-                data={getLevel(sensorData.gas2)}
-                title="Gas sensor 2"
+                data={sensorData.gas2}
+                title="MQ-2"
+           
+                mid={settings.midVal ?? 500}
+                high={settings.highVal ?? 900}
                 percentage={`${((sensorData.gas2 / 1000) * 100).toFixed(2)}% (${sensorData.gas2} / 1000)`}
               />
               <Card
-                data={getLevel(sensorData.pressure)}
+                data={sensorData.pressure}
                 title="Pressure Sensor"
                 percentage={`${((sensorData.pressure / 1000) * 100).toFixed(2)}% (${sensorData.pressure} / 1000)`}
+      
+                mid={settings.midVal ?? 500}
+                high={settings.highVal ?? 900}
               />
             </>
           )}
-          <div className="simplecard">
+          <div className="simplecard" style={{
+            background: sensorData?.humanDetected?"#FFAA00":undefined,
+            color: sensorData?.humanDetected?"black":undefined,
+          }}>
             <div className="smallcaps">
               Last human detection state
             </div>
             <div className="big">
               {humanState ?
-                new Date(humanState.timestamp).toUTCString()
+                new Date(humanState.createdAt).toLocaleString()
                 : "Never detected"
               }
+              <br/>
+           
+            </div>
+            <div className="smallcaps" style={{paddingTop:16}}>
+              CURRENT HUMAN DETECTION
+            </div>
+            <div className="big">
+              {sensorData?.humanDetected ? "Detected" : "Not detected"}
             </div>
           </div>
         </div>
@@ -117,14 +130,17 @@ export default HomePage;
 
 
 
-const Card = ({ data, title, percentage }: {
-  data: string;
+const Card = ({ data, title, percentage, mid, high }: {
+  data: number;
   title: string;
   percentage: string;
+  mid: number;
+  high: number;
 }) => (
   <div className="simplecard">
     <div className="smallcaps">{title}</div>
-    <div className="big">{data}</div>
+    
+     <Gauge value={data}  mid={mid} high={high} /> {/* Render the Gauge */}
     <div className="small">{percentage}</div> {/* Display percentage */}
 
   </div>
