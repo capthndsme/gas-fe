@@ -66,7 +66,7 @@ function App() {
       <HelmetProvider>
         <div className="simplenav ">
           <div className=" max-width">
-            Gas Sensor
+            Gas Detector
             <Link to="/settings" style={{marginLeft: "1em", display: "inline-block", textDecoration: "none"}}></Link>
           </div>
         </div>

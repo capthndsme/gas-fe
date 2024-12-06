@@ -73,7 +73,7 @@ const HomePage = ({ requestPushPermission }: {
             <>
               <Card
                 data={sensorData.gas1}
-                title="MQ-135"
+                title="MQ-2"
                 percentage={`${((sensorData.gas1 / 1000) * 100).toFixed(2)}% (${sensorData.gas1} / 1000)`}
       
                 mid={settings.midVal ?? 500}
@@ -81,7 +81,7 @@ const HomePage = ({ requestPushPermission }: {
               />
               <Card
                 data={sensorData.gas2}
-                title="MQ-2"
+                title="MQ-135"
            
                 mid={settings.midVal ?? 500}
                 high={settings.highVal ?? 900}
