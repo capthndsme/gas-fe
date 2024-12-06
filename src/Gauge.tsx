@@ -20,11 +20,11 @@ const Gauge: React.FC<GaugeProps> = ({ value, mid, high }) => {
         width: 0.3,
         padding: 0.003,
         subArcs: [
-          { limit: mid, showTick: true },
-          { limit: high, showTick: true },
+          { limit: mid, showTick: true, tooltip: {text: "Low"}},
+          { limit: high, showTick: true, tooltip: {text: "Mid"} },
 
-          { limit: 1000, showTick: true }
-        ]
+          { limit: 1000, showTick: true , tooltip: {text: "High"}}
+        ],
       }}
       value={value}
       maxValue={1000}
